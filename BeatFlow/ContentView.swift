@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel: MainViewModel = MainViewModel()
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+                List {
+                    ForEach(viewModel.userList, id: \.id) { users in
+                        Text(users.title)
+                    }
+                }.task {
+                    await viewModel.fetchUserList()
+                }
         }
         .padding()
     }
